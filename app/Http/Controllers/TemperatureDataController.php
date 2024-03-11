@@ -22,6 +22,23 @@ class TemperatureDataController extends Controller
             'temperature' => $validatedData['temperature'],
         ]);
 
-        return response()->json(['message' => 'Data inserted successfully'], 201);
+        return response()->json([$validatedData['device_id'] => '1:Success'], 201);
     }
+
+
+
+    public function viewtemp(Request $request)
+    {
+        // Validate request parameters
+        $validatedData = $request->validate([
+            'device_id' => 'required|string',
+            'api_key' => 'required|string|in:1234567890', // Validate API key
+        ]);
+
+        $deviceData = TemperatureData::where('device_id',  $validatedData['device_id'])->orderBy('created_at', 'desc')->get();
+
+        return response()->json($deviceData);
+    }
+
+
 }
