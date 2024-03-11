@@ -2,8 +2,8 @@ APP_NAME=Laravel
 APP_ENV=local
 APP_KEY=base64:ja+Am8t7Ai42Mx33Jf1GyibKlauEeEMV8BwWs5oWBEA=
 APP_DEBUG=true
-APP_URL=https://dd.easyfarming.in
-ASSET_URL=https://dd.easyfarming.in/public
+APP_URL=https://farm.easyfarming.in
+ASSET_URL=https://farm.easyfarming.in/public
 
 LOG_CHANNEL=stack
 LOG_DEPRECATIONS_CHANNEL=null
