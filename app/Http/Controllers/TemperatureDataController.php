@@ -42,3 +42,6 @@ class TemperatureDataController extends Controller
 
 
 }
+
+
+
