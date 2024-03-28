@@ -1,22 +1,38 @@
 
+@extends('layout.welcomelayout')
+@section('title', 'EasyLab')
+@section('content')
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temperature Data Form</title>
+    <title>EasyLab</title>
+
+    <style>
+
+.btn-primary
+        {
+            background-color: #316FF6;
+            color: #ffffff;
+            padding: 5px;
+            margin-left: 10px;
+            margin-top: 10px;
+            border-radius: 20px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+    </style>
+
 </head>
 <body>
-    <h2>Submit Temperature Data</h2>
-    {{-- <form action="http://your-domain.com/api/temperature-data" method="GET">
-        <label for="device_id">Device ID:</label>
-        <input type="text" id="device_id" name="device_id" required><br><br>
-        <label for="temperature">Temperature:</label>
-        <input type="text" id="temperature" name="temperature" required><br><br>
-        <!-- Include hidden input for API key -->
-        <input type="hidden" id="api_key" name="api_key" value="1234567890">
-        <button type="submit">Submit</button>
-    </form> --}}
+    <a href="{{ route('logout') }}"  class="btn btn-primary">logout</a>
+
+
+
 </body>
 </html>
+
+@endsection
