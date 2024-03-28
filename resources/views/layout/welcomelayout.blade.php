@@ -11,19 +11,15 @@
   </head>
   <body>
     @include('include.welcomeheader')
+    @yield('content')
     @include('include.welcomefooter')
 
 
 
-        @yield('content')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <style>
-        .container
-        {
-            padding-left:0cm;
-        }
-        </style>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
   </body>

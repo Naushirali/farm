@@ -1,26 +1,25 @@
 @extends('layout.welcomelayout')
 @section('title', 'customers')
 @section('content')
+<style>
 
-<html>
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title>Welcome Page</title>
-    <style>
-        body {
-            padding-top: 10px;
-        }
+    .container {
+        max-width: 1350px;
+        margin: 0 auto;
+        padding-top: 10px;
+    }
 
-        .header {
-            margin-left: 2.5cm;
-            margin-right: 1.5cm;
+
+
+
+    .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .search-container {
+    .search-container {
             position: relative;
         }
 
@@ -68,175 +67,166 @@
 
 
 
-    </style>
-</head>
-<body>
+    .receipt-list {
+        list-style: none;
+        padding: 0;
+    }
 
+    .receipt-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        padding: 0;
+    }
 
-<div class="header">
-    <div class="search-container">
-        <div class="round-search">
-            <!-- You can customize the placeholder text and input attributes as needed -->
-            <input type="text" id="searchInput" class="search-bar" placeholder="Search customer">
-            <button type="button" class="search-button">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
-    <a href="{{ route('createcustomer') }}" class="btn btn-primary">create customer</a>
-</div>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const cowContainers = document.querySelectorAll('.cow-container');
-
-        searchInput.addEventListener('input', function() {
-            const searchTerm = searchInput.value.toLowerCase();
-
-            cowContainers.forEach(function(cowContainer) {
-                const cowName = cowContainer.querySelector('.cow-details p').textContent.toLowerCase();
-                if (cowName.includes(searchTerm)) {
-                    cowContainer.style.display = 'block';
-                } else {
-                    cowContainer.style.display = 'none';
-                }
-            });
-        });
-    });
-</script>
-
-
-
-
-
-
-<!-- ... your existing code ... -->
-
-<style>
-    /* ... your existing styles ... */
-
-    .customer-container {
-        position: relative; /* Add relative positioning for absolute button placement */
-        text-align: center; /* Center the content */
-        margin: 10px; /* Add some spacing between cow items */
-        border: 0px solid #316FF6;
+    .receipt-list-item-wrapper {
+        background-color:#1778f2; /* Set the background color of the entire line to blue */
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
         border-radius: 10px;
-        margin-left: 12px;
-        overflow: hidden; /* Ensure container wraps around floated image and details */
-        padding-top: 2px;
-        padding-bottom: 2px;
-        cursor: pointer;
-        margin-left: 2.5cm;
-        margin-right: 1.5cm;
+    }
+
+    .receipt-list h5, .receipt-list a.view-link {
+        font-size: 24px;
+        margin: 0;
+        color: white; /* Set the text color of the product name and "View" option to white */
+        text-decoration: none; /* Remove underline or decoration */
+    }
+
+    .phone-container {
+        flex: 1; /* Use flex to make this container expand to fill available space */
+        padding-right: 5px;
+    }
+
+    .rate-container {
+        min-width: 30%; /* Adjust the min width to control spacing */
+        padding-right: 5px;
+    }
+
+
+
+    /* Margin for lab name with more distance */
+    .name {
+         width: 100px; /* Set a fixed width for the lab name container */
+         white-space: normal; /* Allow text to wrap to the next line */
+         overflow: hidden; /* Hide any overflow beyond the fixed width */
+         text-overflow: ellipsis; /* Add an ellipsis (...) to indicate text overflow */
+        margin-right: 80px; /* Increase the margin for more spacing */
+        min-width: 30%; /* Adjust the min width to control spacing */
+        padding-right: 5px;
+    }
+
+
+
+    @media screen and (max-width: 800px) {
+        .rate-container {
+        min-width: 25%; /* Adjust the min width to control spacing */
+    }
+    }
+
+
+
+    @media screen and (max-width: 680px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 18px; /* Set a smaller font size for screens below 650px */
+        }
+    }
+
+        @media screen and (max-width: 450px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 16px; /* Set a smaller font size for screens below 650px */
+        }
+    }
+
+
+    @media screen and (max-width: 400px) {
+        .rate-container {
+        min-width: 25%; /* Adjust the min width to control spacing */
+    }
+    }
+
+
+
+        @media screen and (max-width: 370px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 14px; /* Set a smaller font size for screens below 650px */
+        }
     }
 
 
 
 
-
-
-
-    /* Target every odd .cow-container and even .alert-container */
-    .customer-container:nth-child(odd)
-{
-    background-color:#B4E4FF;
-}
-
-/* Target every even .cow-container and odd .alert-container */
-.customer-container:nth-child(even)
-{
-    background-color:#FFDEB4;
-}
-
-
-
-
-
-
-
-
-@media screen and (max-width: 1300px)
-{
-
-    .customer-container {
-    margin-left: 1.5cm;
-    margin-right: 1.5cm;
-    }
-
-    .header{
-        margin-left: 1.5cm;
-        margin-right: 1.5cm;
-    }
-
-}
-
-
-
-
-@media screen and (max-width: 900px)
-{
-
-    .customer-container {
-    margin-left: 1cm;
-    margin-right: 1cm;
-    }
-
-    .header{
-        margin-left: 1cm;
-        margin-right: 1cm;
-    }
-
-}
-
-
-@media screen and (max-width: 600px)
-{
-
-    .customer-container {
-    margin-left: 3%;
-    margin-right: 3%;
-    }
-
-    .header{
-        margin-left: 3%;
-        margin-right: 3%;
-    }
-
-}
 
 </style>
 
-@foreach ($customerdata as $customer)
-    <div class="customer-container">
-                <div>
-                    <p>Name: <?php echo $customer['name']; ?></p>
-                </div>
-                <div>
-                    <p>Mobilenumber: <?php echo $customer['mobilenumber']; ?></p>
-                </div>
+<div class="container">
+
+
+
+    <div class="header">
+        <div class="search-container">
+            <div class="round-search">
+                <!-- You can customize the placeholder text and input attributes as needed -->
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search customer">
+                <button type="button" class="search-button">
+                    <i class="fa fa-search"></i>
+                </button>
             </div>
-@endforeach
+        </div>
+        <a href="{{ route('createcustomer') }}" class="btn btn-primary">Add customer</a>
+    </div>
 
 
 
 
 
+    <ul class="receipt-list">
+        @foreach ($customerdata as $receipt)
+        @php
+        $updatedDate = \Carbon\Carbon::parse($receipt->updated_at);
+        $today = \Carbon\Carbon::today();
+        $diffInMonths = $today->diffInMonths($updatedDate);
+        $boxClass = '';
+        if ($diffInMonths >= 3) {
+            $boxClass = 'bg-brickred';
+        } elseif ($diffInMonths >= 1) {
+            $boxClass = 'bg-lightyellow';
+        }
+        @endphp
+        <li class="receipt-list-item">
+            <div class="receipt-list-item-wrapper {{ $boxClass }}">
+                <h5 class = "name">{{ $receipt->name}}</h5>
+
+                <div class="phone-container">
+                    <h5>{{ $receipt->mobilenumber }}</h5>
+                  </div>
+
+                  <div class="rate-container">
+                    <h5>{{ $receipt->location }}</h5>
+                  </div>
 
 
 
-
-
-
-
-</body>
-</html>
-
-
-<br>
-<br>
-<br>
+                <a href="#" class="view-link">View</a>
+            </div>
+        </li>
+        @endforeach
+    </ul>
+    {{-- {{ $data->links() }} --}}
+</div>
+<br><br>
 @endsection
+
+
+
+
+
+
+
+
 
 

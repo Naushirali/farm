@@ -137,7 +137,7 @@
 
         <div class="footer-item">
             <a href="{{ route('branchowners') }}"><i class="fas fa-link"></i></a>
-            <a href="{{ route('branchowners') }}">Branch-owners</a>
+            <a href="{{ route('branchowners') }}">Owners</a>
         </div>
 
 
