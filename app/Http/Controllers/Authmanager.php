@@ -18,6 +18,18 @@ class Authmanager extends Controller
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     function customer()
     {
         $customerdata = User::all()->reverse();
@@ -27,7 +39,6 @@ class Authmanager extends Controller
 
     function  createcustomer()
     {
-
          return view('customer.createcustomer');
     }
 
@@ -71,6 +82,70 @@ class Authmanager extends Controller
         }
         return redirect(route('customer'))->with("success", "login from here");
     }
+
+
+
+
+    public function viewcustomer($id)
+     {
+    $customer = User::find($id);
+    return view('customer.viewcustomer', ['customer' => $customer]);
+    }
+
+
+
+    public function   editcustomer($id)
+    {
+   $customer = User::find($id);
+   return view('customer.editcustomer', ['customer' => $customer]);
+   }
+
+
+
+  public function updatecustomer(Request $request, $id)
+  {
+
+    $customer = User::find($id);
+    $customer->name = $request->input('name');
+    $customer->location = $request->input('location');
+    $customer->mobilenumber = $request->input('mobilenumber');
+
+    // Check if a new password is provided
+    if (!empty($request->input('password'))) {
+        $customer->password = Hash::make($request->input('password'));
+    }
+
+
+    $customer->update();
+    return redirect(route('viewcustomer', ['id' => $id]));
+  }
+
+
+
+
+
+
+
+
+  public function deletecustomer($id)
+  {
+    $customer = User::find($id);
+
+      if ( $customer) {
+        $customer->delete();
+      return redirect(route('customer'))->with('status', "Data deleted successfully.");
+     } else {
+     return redirect(route('customer'))->with('error', "Data not found or already deleted.");
+       }
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -136,6 +211,13 @@ class Authmanager extends Controller
         }
         return redirect(route('branch'))->with("success");
     }
+
+
+
+
+
+
+
 
 
 

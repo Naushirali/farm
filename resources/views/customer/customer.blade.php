@@ -211,7 +211,9 @@
 
 
 
-                <a href="#" class="view-link">View</a>
+                  <a href="{{ route('viewcustomer', ['id' => $receipt->id]) }}" class="view-link">View</a>
+
+
             </div>
         </li>
         @endforeach

@@ -32,17 +32,26 @@ Route::get('/welcome', [Authmanager::class,'welcome'])->name('welcome')->middlew
 
 
 
+
 Route::get('/customer', [Authmanager::class,'customer'])->name('customer')->middleware(['guests']);
-Route::get('/branch', [Authmanager::class,'branch'])->name('branch')->middleware(['guests']);
-
-
 Route::get('/createcustomer', [Authmanager::class,'createcustomer'])->name('createcustomer')->middleware(['guests']);
 Route::post('/createcustomer', [Authmanager::class,'createcustomerpost'])->name('createcustomer.post')->middleware(['guests']);
+Route::get('/viewcustomer/{id}', [Authmanager::class,'viewcustomer'])->name('viewcustomer')->middleware(['guests']);
+Route::get('/editcustomer/{id}', [Authmanager::class,'editcustomer'])->name('editcustomer')->middleware(['guests']);
+Route::put('updatecustomer/{id}', [Authmanager::class,'updatecustomer'])->name('updatecustomer')->middleware(['guests']);
+Route::get('deletecustomer/{id}', [Authmanager::class,'deletecustomer'])->name('deletecustomer')->middleware(['guests']);
 
 
 
+
+
+Route::get('/branch', [Authmanager::class,'branch'])->name('branch')->middleware(['guests']);
 Route::get('/createbranch', [Authmanager::class,'createbranch'])->name('createbranch')->middleware(['guests']);
 Route::post('/createbranch', [Authmanager::class,'createbranchpost'])->name('createbranch.post')->middleware(['guests']);
+
+
+
+
 
 
 Route::get('/branchowners', [Authmanager::class,'branchowners'])->name('branchowners')->middleware(['guests']);
