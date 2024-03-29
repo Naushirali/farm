@@ -219,6 +219,33 @@
     {{-- {{ $data->links() }} --}}
 </div>
 <br><br>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById("searchInput");
+        const receiptItems = document.querySelectorAll(".receipt-list-item");
+
+        searchInput.addEventListener("input", function() {
+            const searchTerm = this.value.trim().toLowerCase();
+
+            receiptItems.forEach(function(item) {
+                const name = item.querySelector(".name").textContent.toLowerCase();
+                const phone = item.querySelector(".phone-container").textContent.toLowerCase();
+                const location = item.querySelector(".rate-container").textContent.toLowerCase();
+
+                if (name.includes(searchTerm) || phone.includes(searchTerm) || location.includes(searchTerm)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+
+
+
 @endsection
 
 

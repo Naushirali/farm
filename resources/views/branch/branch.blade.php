@@ -1,26 +1,25 @@
 @extends('layout.welcomelayout')
 @section('title', 'branches')
 @section('content')
+<style>
 
-<html>
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title>Welcome Page</title>
-    <style>
-        body {
-            padding-top: 10px;
-        }
+    .container {
+        max-width: 1350px;
+        margin: 0 auto;
+        padding-top: 10px;
+    }
 
-        .header {
-            margin-left: 2.5cm;
-            margin-right: 1.5cm;
+
+
+
+    .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .search-container {
+    .search-container {
             position: relative;
         }
 
@@ -68,39 +67,176 @@
 
 
 
-    </style>
-</head>
-<body>
+    .receipt-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .receipt-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        padding: 0;
+    }
+
+    .receipt-list-item-wrapper {
+        background-color:#1778f2; /* Set the background color of the entire line to blue */
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .receipt-list h5, .receipt-list a.view-link {
+        font-size: 24px;
+        margin: 0;
+        color: white; /* Set the text color of the product name and "View" option to white */
+        text-decoration: none; /* Remove underline or decoration */
+    }
+
+    .phone-container {
+        flex: 1; /* Use flex to make this container expand to fill available space */
+        padding-right: 5px;
+    }
+
+    .rate-container {
+        min-width: 30%; /* Adjust the min width to control spacing */
+        padding-right: 5px;
+    }
 
 
-<div class="header">
-    <div class="search-container">
-        <div class="round-search">
-            <!-- You can customize the placeholder text and input attributes as needed -->
-            <input type="text" id="searchInput" class="search-bar" placeholder="Search branch">
-            <button type="button" class="search-button">
-                <i class="fa fa-search"></i>
-            </button>
+
+    /* Margin for lab name with more distance */
+    .name {
+         width: 100px; /* Set a fixed width for the lab name container */
+         white-space: normal; /* Allow text to wrap to the next line */
+         overflow: hidden; /* Hide any overflow beyond the fixed width */
+         text-overflow: ellipsis; /* Add an ellipsis (...) to indicate text overflow */
+        margin-right: 80px; /* Increase the margin for more spacing */
+        min-width: 30%; /* Adjust the min width to control spacing */
+        padding-right: 5px;
+    }
+
+
+
+    @media screen and (max-width: 800px) {
+        .rate-container {
+        min-width: 25%; /* Adjust the min width to control spacing */
+    }
+    }
+
+
+
+    @media screen and (max-width: 680px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 18px; /* Set a smaller font size for screens below 650px */
+        }
+    }
+
+        @media screen and (max-width: 450px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 16px; /* Set a smaller font size for screens below 650px */
+        }
+    }
+
+
+    @media screen and (max-width: 400px) {
+        .rate-container {
+        min-width: 25%; /* Adjust the min width to control spacing */
+    }
+    }
+
+
+
+        @media screen and (max-width: 370px) {
+        .receipt-list h5, .receipt-list a.view-link {
+            font-size: 14px; /* Set a smaller font size for screens below 650px */
+        }
+    }
+
+
+
+
+
+</style>
+
+<div class="container">
+
+
+
+    <div class="header">
+        <div class="search-container">
+            <div class="round-search">
+                <!-- You can customize the placeholder text and input attributes as needed -->
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search branch">
+                <button type="button" class="search-button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
         </div>
+        <a href="{{ route('createbranch') }}" class="btn btn-primary">Add branch</a>
     </div>
-    <a href="{{ route('createbranch') }}" class="btn btn-primary">create branch</a>
-</div>
 
+
+
+
+
+    <ul class="receipt-list">
+        @foreach ($branchdata as $receipt)
+        @php
+        $updatedDate = \Carbon\Carbon::parse($receipt->updated_at);
+        $today = \Carbon\Carbon::today();
+        $diffInMonths = $today->diffInMonths($updatedDate);
+        $boxClass = '';
+        if ($diffInMonths >= 3) {
+            $boxClass = 'bg-brickred';
+        } elseif ($diffInMonths >= 1) {
+            $boxClass = 'bg-lightyellow';
+        }
+        @endphp
+        <li class="receipt-list-item">
+            <div class="receipt-list-item-wrapper {{ $boxClass }}">
+                <h5 class = "name">{{ $receipt->name}}</h5>
+
+                <div class="phone-container">
+                    <h5>{{ $receipt->mobilenumber }}</h5>
+                  </div>
+
+                  <div class="rate-container">
+                    <h5>{{ $receipt->location }}</h5>
+                  </div>
+
+
+
+                <a href="#" class="view-link">View</a>
+            </div>
+        </li>
+        @endforeach
+    </ul>
+    {{-- {{ $data->links() }} --}}
+</div>
+<br><br>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const cowContainers = document.querySelectorAll('.cow-container');
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById("searchInput");
+        const receiptItems = document.querySelectorAll(".receipt-list-item");
 
-        searchInput.addEventListener('input', function() {
-            const searchTerm = searchInput.value.toLowerCase();
+        searchInput.addEventListener("input", function() {
+            const searchTerm = this.value.trim().toLowerCase();
 
-            cowContainers.forEach(function(cowContainer) {
-                const cowName = cowContainer.querySelector('.cow-details p').textContent.toLowerCase();
-                if (cowName.includes(searchTerm)) {
-                    cowContainer.style.display = 'block';
+            receiptItems.forEach(function(item) {
+                const name = item.querySelector(".name").textContent.toLowerCase();
+                const phone = item.querySelector(".phone-container").textContent.toLowerCase();
+                const location = item.querySelector(".rate-container").textContent.toLowerCase();
+
+                if (name.includes(searchTerm) || phone.includes(searchTerm) || location.includes(searchTerm)) {
+                    item.style.display = "block";
                 } else {
-                    cowContainer.style.display = 'none';
+                    item.style.display = "none";
                 }
             });
         });
@@ -109,135 +245,4 @@
 
 
 
-
-
-
-<!-- ... your existing code ... -->
-
-<style>
-    /* ... your existing styles ... */
-
-    .customer-container {
-        position: relative; /* Add relative positioning for absolute button placement */
-        text-align: center; /* Center the content */
-        margin: 10px; /* Add some spacing between cow items */
-        border: 0px solid #316FF6;
-        border-radius: 10px;
-        margin-left: 12px;
-        overflow: hidden; /* Ensure container wraps around floated image and details */
-        padding-top: 2px;
-        padding-bottom: 2px;
-        cursor: pointer;
-        margin-left: 2.5cm;
-        margin-right: 1.5cm;
-    }
-
-
-
-
-
-
-
-    /* Target every odd .cow-container and even .alert-container */
-    .customer-container:nth-child(odd)
-{
-    background-color:#B4E4FF;
-}
-
-/* Target every even .cow-container and odd .alert-container */
-.customer-container:nth-child(even)
-{
-    background-color:#FFDEB4;
-}
-
-
-
-
-
-
-
-
-@media screen and (max-width: 1300px)
-{
-
-    .customer-container {
-    margin-left: 1.5cm;
-    margin-right: 1.5cm;
-    }
-
-    .header{
-        margin-left: 1.5cm;
-        margin-right: 1.5cm;
-    }
-
-}
-
-
-
-
-@media screen and (max-width: 900px)
-{
-
-    .customer-container {
-    margin-left: 1cm;
-    margin-right: 1cm;
-    }
-
-    .header{
-        margin-left: 1cm;
-        margin-right: 1cm;
-    }
-
-}
-
-
-@media screen and (max-width: 600px)
-{
-
-    .customer-container {
-    margin-left: 3%;
-    margin-right: 3%;
-    }
-
-    .header{
-        margin-left: 3%;
-        margin-right: 3%;
-    }
-
-}
-
-</style>
-
-
-
-
-
-
-@foreach ($branchdata as $branch)
-    <div class="customer-container">
-                <div>
-                    <p>Name: <?php echo $branch['name'] . ' - ' . $branch['location']; ?></p>
-                </div>
-                <div>
-                    <p>Mobilenumber: <?php echo $branch['mobilenumber']; ?></p>
-                </div>
-            </div>
-@endforeach
-
-
-
-
-
-
-
-</body>
-</html>
-
-
-<br>
-<br>
-<br>
 @endsection
-
-
-
