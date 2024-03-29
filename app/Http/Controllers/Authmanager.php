@@ -162,17 +162,6 @@ class Authmanager extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
   public function deletecustomer($id)
   {
     $customer = User::find($id);
@@ -184,6 +173,11 @@ class Authmanager extends Controller
      return redirect(route('customer'))->with('error', "Data not found or already deleted.");
        }
 }
+
+
+
+
+
 
 
 
@@ -224,7 +218,6 @@ class Authmanager extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'code' => 'required',
             'location' => 'required',
             'apikey' => 'required',
             'mobilenumber' => 'required|string|min:10|max:10|unique:users',
@@ -244,7 +237,6 @@ class Authmanager extends Controller
 
 
         $data['name'] = $request->name;
-        $data['code'] = $request->code;
         $data['location'] = $request->location;
         $data['apikey'] = $request->apikey;
         $data['mobilenumber'] = $request->mobilenumber;
@@ -257,6 +249,90 @@ class Authmanager extends Controller
         }
         return redirect(route('branch'))->with("success");
     }
+
+
+
+
+    public function viewbranch($id)
+     {
+    $branch = Branch::find($id);
+    return view('branch.viewbranch', ['branch' => $branch]);
+    }
+
+
+    public function   editbranch($id)
+    {
+   $branch = Branch::find($id);
+   return view('branch.editbranch', ['branch' => $branch]);
+   }
+
+
+
+
+
+
+   public function updatebranch(Request $request, $id)
+  {
+
+
+    $request->validate([
+        'name' => 'required',
+        'location' => 'required',
+        'apikey'   => 'required',
+        // 'password' => 'required|string|min:6',
+        'mobilenumber' => 'required|string|min:10|max:10|unique:users,mobilenumber,'.$id, // Add $id to ignore current user
+    ], [
+
+        // 'password.min' => 'The password must be at least :min characters.',
+        // 'password.same' => 'The password is not matching.',
+
+        'mobilenumber.min' => 'The Mobile number must be at least :min characters.',
+        'mobilenumber.max' => 'The Mobile number not be greater than :max characters.',
+        'mobilenumber.unique' => 'The Mobile number has already been taken, change number.',
+    ], [
+        'min' => ':attribute must be at least :min characters.',
+        'max' => ':attribute not be greater than :max characters.',
+    ]);
+
+
+
+    $branch = Branch::find($id);
+    $branch->name = $request->input('name');
+    $branch->location = $request->input('location');
+    $branch->mobilenumber = $request->input('mobilenumber');
+    $branch->apikey = $request->input('apikey');
+
+
+
+
+    $branch->update();
+    return redirect(route('viewbranch', ['id' => $id]));
+  }
+
+
+
+
+
+
+
+
+
+  public function deletebranch($id)
+  {
+    $branch = Branch::find($id);
+
+      if (  $branch) {
+        $branch->delete();
+      return redirect(route('branch'))->with('status', "Data deleted successfully.");
+     } else {
+     return redirect(route('branch'))->with('error', "Data not found or already deleted.");
+       }
+}
+
+
+
+
+
 
 
 

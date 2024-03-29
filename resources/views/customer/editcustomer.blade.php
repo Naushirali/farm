@@ -1,5 +1,5 @@
 @extends('layout.welcomelayout')
-@section('title', 'Edit Receipt')
+@section('title', 'Edit Customer')
 @section('content')
 <style>
     .container {

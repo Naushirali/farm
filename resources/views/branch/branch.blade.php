@@ -202,16 +202,16 @@
                 <h5 class = "name">{{ $receipt->name}}</h5>
 
                 <div class="phone-container">
-                    <h5>{{ $receipt->mobilenumber }}</h5>
-                  </div>
-
-                  <div class="rate-container">
                     <h5>{{ $receipt->location }}</h5>
                   </div>
 
+                  <div class="rate-container">
+                    <h5>{{ $receipt->mobilenumber}}</h5>
+                  </div>
 
 
-                <a href="#" class="view-link">View</a>
+
+                  <a href="{{ route('viewbranch', ['id' => $receipt->id]) }}" class="view-link">View</a>
             </div>
         </li>
         @endforeach

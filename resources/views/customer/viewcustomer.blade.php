@@ -1,5 +1,5 @@
 @extends('layout.welcomelayout')
-@section('title', 'customers')
+@section('title', 'customer')
 @section('content')
 <style>
     .container {
@@ -7,7 +7,7 @@
     }
 
     .card {
-        border: 2px solid #e0e0e0;
+        border: 1px solid #e0e0e0;
     }
 
     .card-header {
@@ -19,8 +19,6 @@
     }
 </style>
 
-@section('title', 'View Support')
-@section('content')
 <div class="container mt-5">
     <h1>Customer</h1>
 

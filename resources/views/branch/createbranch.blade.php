@@ -129,8 +129,6 @@
 
             <input type="text" id="location" placeholder="Branch Location" name="location" required autocomplete="off" value="{{ old('location') }}">
 
-            <input type="text" id="code" placeholder="Branch code" name="code" required autocomplete="off" value="{{ old('code') }}">
-
             <div class="input-group">
                 <input type="text" id="mobilenumber" name="mobilenumber" placeholder="Mobile number" required autocomplete="off" value="{{ old('mobilenumber') }}">
                 @if ($errors->has('mobilenumber'))

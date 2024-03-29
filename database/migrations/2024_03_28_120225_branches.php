@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('mobilenumber')->unique();
-            $table->string('code');
             $table->string('location');
             $table->string('apikey');
             $table->timestamps();

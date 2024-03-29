@@ -48,6 +48,10 @@ Route::get('deletecustomer/{id}', [Authmanager::class,'deletecustomer'])->name('
 Route::get('/branch', [Authmanager::class,'branch'])->name('branch')->middleware(['guests']);
 Route::get('/createbranch', [Authmanager::class,'createbranch'])->name('createbranch')->middleware(['guests']);
 Route::post('/createbranch', [Authmanager::class,'createbranchpost'])->name('createbranch.post')->middleware(['guests']);
+Route::get('/viewbranch/{id}', [Authmanager::class,'viewbranch'])->name('viewbranch')->middleware(['guests']);
+Route::get('/editbranch/{id}', [Authmanager::class,'editbranch'])->name('editbranch')->middleware(['guests']);
+Route::put('updatebranch/{id}', [Authmanager::class,'updatebranch'])->name('updatebranch')->middleware(['guests']);
+Route::get('deletebranch/{id}', [Authmanager::class,'deletebranch'])->name('deletebranch')->middleware(['guests']);
 
 
 

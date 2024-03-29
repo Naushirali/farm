@@ -21,7 +21,6 @@ class Branch extends Authenticatable
 
      protected $fillable = [
         'name',
-        'code',
         'mobilenumber',
         'location',
         'apikey',
