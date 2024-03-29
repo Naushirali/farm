@@ -47,6 +47,13 @@
     .password-toggle i {
         color: #aaa; /* Eye icon color */
     }
+
+    .alert {
+        font-size: 12px;
+        color:red; /* Customize the color as needed */
+        margin-bottom: 10px; /* Adjust the margin-top as needed */
+        margin-top: 10px; /* Remove padding */
+    }
 </style>
 
 <div class="container">
@@ -59,17 +66,21 @@
 
             <div class="form-group">
                 <label for="name" class="form-label"><i class="fas fa-user"></i> Customer name</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{  $customer->name }}" required autocomplete="off">
+                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $customer->name }}" required autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label for="location" class="form-label"><i class="fas fa-map-marker-alt"></i> Location</label>
-                <input type="text" class="form-control" id="location" name="location"  value="{{  $customer->location }}" required autocomplete="off">
+                <input type="text" class="form-control" id="location" name="location" value="{{ old('location') ?? $customer->location }}" required autocomplete="off">
             </div>
+
 
             <div class="form-group">
                 <label for="mobilenumber" class="form-label"><i class="fas fa-phone"></i> Customer number</label>
-                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber"  value="{{ $customer->mobilenumber}}"  required autocomplete="off">
+                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber"  value="{{ old('mobilenumber') ?? $customer->mobilenumber }}"  required autocomplete="off">
+                @if ($errors->has('mobilenumber'))
+                <div class="alert alert-danger alert-small">{{ $errors->first('mobilenumber') }}</div>
+            @endif
             </div>
 
             <div class="form-group">
@@ -79,7 +90,12 @@
                     <i class="fa fa-eye" id="password-toggle-icon"></i>
                 </span>
                 <small class="form-text text-muted">Leave blank if you don't want to change the password</small>
+                @if ($errors->has('password'))
+                <div class="alert alert-danger alert-small">{{ $errors->first('password') }}</div>
+                @endif
             </div>
+
+
 
             <script>
                 function togglePasswordVisibility(inputId) {
@@ -103,7 +119,7 @@
     </div>
 </div>
 
-<br><br>
+<br><br><br><br>
 @endsection
 
 

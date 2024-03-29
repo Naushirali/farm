@@ -105,6 +105,27 @@ class Authmanager extends Controller
   public function updatecustomer(Request $request, $id)
   {
 
+
+    $request->validate([
+        'name' => 'required',
+        'location' => 'required',
+        // 'password' => 'required|string|min:6',
+        'mobilenumber' => 'required|string|min:10|max:10|unique:users,mobilenumber,'.$id, // Add $id to ignore current user
+    ], [
+
+        // 'password.min' => 'The password must be at least :min characters.',
+        // 'password.same' => 'The password is not matching.',
+
+        'mobilenumber.min' => 'The Mobile number must be at least :min characters.',
+        'mobilenumber.max' => 'The Mobile number not be greater than :max characters.',
+        'mobilenumber.unique' => 'The Mobile number has already been taken, change number.',
+    ], [
+        'min' => ':attribute must be at least :min characters.',
+        'max' => ':attribute not be greater than :max characters.',
+    ]);
+
+
+
     $customer = User::find($id);
     $customer->name = $request->input('name');
     $customer->location = $request->input('location');
@@ -112,6 +133,21 @@ class Authmanager extends Controller
 
     // Check if a new password is provided
     if (!empty($request->input('password'))) {
+
+
+        $request->validate([
+            'password' => 'required|string|min:6',
+        ], [
+
+            'password.min' => 'The password must be at least :min characters.',
+            'password.same' => 'The password is not matching.',
+        ], [
+            'min' => ':attribute must be at least :min characters.',
+            'max' => ':attribute not be greater than :max characters.',
+        ]);
+
+
+
         $customer->password = Hash::make($request->input('password'));
     }
 
@@ -119,6 +155,16 @@ class Authmanager extends Controller
     $customer->update();
     return redirect(route('viewcustomer', ['id' => $id]));
   }
+
+
+
+
+
+
+
+
+
+
 
 
 
