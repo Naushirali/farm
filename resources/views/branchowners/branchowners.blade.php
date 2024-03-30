@@ -1,5 +1,5 @@
 @extends('layout.welcomelayout')
-@section('title', 'branches')
+@section('title', 'owners')
 @section('content')
 
 <style>
@@ -200,14 +200,25 @@
         @endphp
         <li class="receipt-list-item">
             <div class="receipt-list-item-wrapper {{ $boxClass }}">
-                <h5 class = "name">{{ $receipt->branch}}</h5>
+                <h5 class="name">
+                    <?php
+                    // Retrieve the branch name based on the branch ID
+                    $branch = App\Models\Branch::find($receipt->branch);
+                    // Check if branch is found
+                    if ($branch) {
+                        echo $branch->name;
+                    } else {
+                        echo "Branch not found"; // Display a message if branch is not found
+                    }
+                    ?>
+                </h5>
 
                 {{-- <div class="phone-container">
                     <h5>{{ $receipt->mobilenumber }}</h5>
                   </div> --}}
 
                   <div class="rate-container">
-                    <h5><p>
+                    <h5>
                         <?php $owners = is_array($receipt['owners']) ? $receipt['owners'] : explode(',', $receipt['owners']); ?>
                         @foreach ($owners as $ownerId)
                             <?php
@@ -220,7 +231,7 @@
                                 ,
                             @endif
                         @endforeach
-                    </p></h5>
+                    </h5>
                   </div>
 
 

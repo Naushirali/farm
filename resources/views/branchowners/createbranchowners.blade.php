@@ -126,7 +126,7 @@
         <select id="branch" name="branch_name" required>
             <option value="">Select branch name</option>
             @foreach($branchdata as $branch)
-                <option value="{{ $branch->name }}">{{ $branch->name }} - {{ $branch->location }}</option>
+                <option value="{{ $branch->id }}">{{ $branch->name }} - {{ $branch->location }}</option>
             @endforeach
         </select>
 
@@ -134,7 +134,7 @@
             <select class="owner-select" name="owner_id[]" required>
                 <option value="">Select owner name</option>
                 @foreach($userdata as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    <option value="{{ $user->id }}">{{ $user->name }} - {{ $user->mobilenumber }}</option>
                 @endforeach
             </select>
         </div>
