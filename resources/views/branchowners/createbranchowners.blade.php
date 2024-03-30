@@ -159,7 +159,7 @@
         @foreach($userdata as $user)
             var option = document.createElement('option');
             option.setAttribute('value', '{{ $user->id }}');
-            option.appendChild(document.createTextNode('{{ $user->name }}'));
+            option.appendChild(document.createTextNode('{{ $user->name }} - {{ $user->mobilenumber }}'));
             select.appendChild(option);
         @endforeach
         container.appendChild(select);
