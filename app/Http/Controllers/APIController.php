@@ -41,6 +41,9 @@ class APIController extends Controller
             $table->timestamps();
             // $table->primary('cID');
         });
+        $messages[] = "Customer table created successfully.";
+    } else {
+        $messages[] = "Customer table already exists.";
     }
 
     if (!Schema::hasTable($billTableName)) {
@@ -64,6 +67,9 @@ class APIController extends Controller
             $table->timestamps();
             // $table->primary('BillNo');
         });
+        $messages[] = "Bill table created successfully.";
+    } else {
+        $messages[] = "Bill table already exists.";
     }
 
     if (!Schema::hasTable($billReceiptTableName)) {
@@ -81,6 +87,9 @@ class APIController extends Controller
             $table->timestamps();
             // $table->primary('ID');
         });
+        $messages[] = "Bill receipt table created successfully.";
+    } else {
+        $messages[] = "Bill receipt table already exists.";
     }
 
     if (!Schema::hasTable($testsTableName)) {
@@ -99,33 +108,16 @@ class APIController extends Controller
             $table->timestamps();
             // $table->primary('ID');
         });
+        $messages[] = "Tests table created successfully.";
+    } else {
+        $messages[] = "Tests table already exists.";
     }
 
-    return response()->json(['message' => "Tables created successfully"]);
+    return response()->json(['messages' => $messages]);
 }
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
