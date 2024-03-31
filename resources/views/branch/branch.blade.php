@@ -17,6 +17,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 10px;
         }
 
     .search-container {
@@ -67,95 +68,96 @@
 
 
 
-    .receipt-list {
-        list-style: none;
+        .receipt-list {
+        list-style-type: none;
         padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
+    /* Receipt list item styles */
     .receipt-list-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-        padding: 0;
+        width: calc(50% - 10px); /* Two items per row with some spacing */
+        margin-bottom: 15px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(130, 150, 249, 0.4);
     }
 
     .receipt-list-item-wrapper {
-        background-color:#1778f2; /* Set the background color of the entire line to blue */
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border-radius: 10px;
+    display: flex; /* Add flex display */
+    align-items: flex-start; /* Align items vertically at the start */
+    justify-content: space-between; /* Align items with space between */
+    padding: 20px;
+}
+
+.column-list-item-wrapper {
+    display: flex; /* Add flex display */
+    align-items: flex-start; /* Align items vertically at the start */
+   flex-direction: column;
+}
+
+
+.name {
+       margin-bottom: -5px;
+        color: #333;
     }
 
-    .receipt-list h5, .receipt-list a.view-link {
-        font-size: 24px;
+    /* Phone container and rate container styles */
+    .phone-container
+    {
         margin: 0;
-        color: white; /* Set the text color of the product name and "View" option to white */
-        text-decoration: none; /* Remove underline or decoration */
     }
-
-    .phone-container {
-        flex: 1; /* Use flex to make this container expand to fill available space */
-        padding-right: 5px;
-    }
-
     .rate-container {
-        min-width: 30%; /* Adjust the min width to control spacing */
-        padding-right: 5px;
+        margin: 0;
+    }
+
+    /* View link styles */
+    .view-link {
+        padding: 5px 13.5px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-link {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #27ae60; /* Change background color to green */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+    .view-link:hover {
+        background-color: #2980b9;
+    }
+
+    .edit-link:hover {
+    background-color: #219d52; /* Change hover background color to a darker shade of green */
+}
+
+
+    /* Responsive design */
+    @media only screen and (max-width: 700px) {
+        .receipt-list-item {
+        width: 100%; /* Display one item per row on smaller screens */
     }
 
 
 
-    /* Margin for lab name with more distance */
-    .name {
-         width: 100px; /* Set a fixed width for the lab name container */
-         white-space: normal; /* Allow text to wrap to the next line */
-         overflow: hidden; /* Hide any overflow beyond the fixed width */
-         text-overflow: ellipsis; /* Add an ellipsis (...) to indicate text overflow */
-        margin-right: 80px; /* Increase the margin for more spacing */
-        min-width: 30%; /* Adjust the min width to control spacing */
-        padding-right: 5px;
     }
 
 
 
-    @media screen and (max-width: 800px) {
-        .rate-container {
-        min-width: 25%; /* Adjust the min width to control spacing */
-    }
-    }
 
 
 
-    @media screen and (max-width: 680px) {
-        .receipt-list h5, .receipt-list a.view-link {
-            font-size: 18px; /* Set a smaller font size for screens below 650px */
-        }
-    }
-
-        @media screen and (max-width: 450px) {
-        .receipt-list h5, .receipt-list a.view-link {
-            font-size: 16px; /* Set a smaller font size for screens below 650px */
-        }
-    }
 
 
-    @media screen and (max-width: 400px) {
-        .rate-container {
-        min-width: 25%; /* Adjust the min width to control spacing */
-    }
-    }
-
-
-
-        @media screen and (max-width: 370px) {
-        .receipt-list h5, .receipt-list a.view-link {
-            font-size: 14px; /* Set a smaller font size for screens below 650px */
-        }
-    }
 
 
 
@@ -186,32 +188,29 @@
 
     <ul class="receipt-list">
         @foreach ($branchdata as $receipt)
-        @php
-        $updatedDate = \Carbon\Carbon::parse($receipt->updated_at);
-        $today = \Carbon\Carbon::today();
-        $diffInMonths = $today->diffInMonths($updatedDate);
-        $boxClass = '';
-        if ($diffInMonths >= 3) {
-            $boxClass = 'bg-brickred';
-        } elseif ($diffInMonths >= 1) {
-            $boxClass = 'bg-lightyellow';
-        }
-        @endphp
         <li class="receipt-list-item">
-            <div class="receipt-list-item-wrapper {{ $boxClass }}">
-                <h5 class = "name">{{ $receipt->name}}</h5>
+            <div class="receipt-list-item-wrapper">
+                <div class="column-list-item-wrapper">
+
+                <div class="name">
+                  <h5> {{ $receipt->name}}</h5>
+                </div>
 
                 <div class="phone-container">
-                    <h5>{{ $receipt->location }}</h5>
+                     {{ $receipt->location }}
                   </div>
 
                   <div class="rate-container">
-                    <h5>{{ $receipt->mobilenumber}}</h5>
+                  {{ $receipt->mobilenumber }}
                   </div>
 
+                </div>
 
 
-                  <a href="{{ route('viewbranch', ['id' => $receipt->id]) }}" class="view-link">View</a>
+                <div class="column-list-item-wrapper">
+                  <a href="{{ route('editbranch', ['id' => $receipt->id]) }}" class="view-link">Edit</a>
+                  <a href="{{ route('viewbranch', ['id' => $receipt->id]) }}" class="edit-link">View</a>
+                </div>
             </div>
         </li>
         @endforeach
@@ -219,6 +218,7 @@
     {{-- {{ $data->links() }} --}}
 </div>
 <br><br>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

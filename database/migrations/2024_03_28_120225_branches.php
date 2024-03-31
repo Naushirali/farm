@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('mobilenumber')->unique();
             $table->string('location');
             $table->string('apikey');
+            $table->string('password');
             $table->timestamps();
         });
     }

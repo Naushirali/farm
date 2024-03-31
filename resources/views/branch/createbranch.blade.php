@@ -1,21 +1,12 @@
 @extends('layout.welcomelayout')
 @section('title', 'EasyLab')
 @section('content')
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Create Branch</title>
     <style>
-        body {
+        .body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             margin: 0;
-            padding-top: 90px;
+            padding-top: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,7 +17,7 @@
             background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 400px;
             text-align: center;
@@ -110,14 +101,43 @@
 
 
         }
+
+
+
+/* CSS */
+.input-with-button {
+  display: flex;
+  align-items: center;
+}
+
+#apikey {
+  flex: 1;
+  padding: 10px;
+  border-radius: 3px 0 0 3px;
+}
+
+#generateKeyButton {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 0 3px 3px 0;
+  padding: 11px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+#generateKeyButton:hover {
+  background-color: #2980b9;
+}
+
+
     </style>
-</head>
-<body>
+
 
     <!-- Add this in your view to display error or success messages -->
 <!-- Add this within your form to display the mobile number error -->
 
-
+<div class="body">
 
 
     <div class="login-container">
@@ -138,12 +158,44 @@
 
 
 
+            <div class="input-group">
+                <input type="text" id="pass" name="pass" placeholder="Password" required autocomplete="off" value="{{ old('pass') }}">
+                @if ($errors->has('pass'))
+                <div class="alert alert-danger alert-small">{{ $errors->first('pass') }}</div>
+            @endif
+            </div>
 
 
 
-            <input type="text" id="apikey" placeholder="API key" name="apikey" required autocomplete="off" value="{{ old('apikey') }}">
+            <div class="input-with-button">
+                <input type="text" id="apikey" placeholder="API key" name="apikey" required autocomplete="off" value="{{ old('apikey') }}">
+                <button type="button" id="generateKeyButton" onclick="generateApiKey()">
+                  <i class="fas fa-key"></i> <!-- Assuming you're using Font Awesome for the key icon -->
+                </button>
+            </div>
+            <div class="input-group">
+            @if ($errors->has('apikey'))
+            <div class="alert alert-danger alert-small">{{ $errors->first('apikey') }}</div>
+            @endif
+            </div>
 
 
+
+<script>
+
+    // JavaScript
+function generateApiKey() {
+  var apiKey = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  for (var i = 0; i < 10; i++) {
+    apiKey += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  document.getElementById('apikey').value = apiKey;
+}
+
+    </script>
 
 
 
@@ -153,11 +205,12 @@
         </form>
 
     </div>
-</body>
+</div>
 
 
 
 
-</html>
+
+<br><br>
 
 @endsection

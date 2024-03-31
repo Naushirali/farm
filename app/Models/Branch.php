@@ -24,6 +24,7 @@ class Branch extends Authenticatable
         'mobilenumber',
         'location',
         'apikey',
+        'password',
     ];
 
 

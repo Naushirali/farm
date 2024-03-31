@@ -86,10 +86,23 @@
             </div>
 
 
+            <div class="form-group">
+                <label for="pass" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                <input type="text" class="form-control" id="pass" name="pass"  value="{{ old('pass') ?? $branch->password }}"  required autocomplete="off">
+                @if ($errors->has('pass'))
+                <div class="alert alert-danger alert-small">{{ $errors->first('pass') }}</div>
+            @endif
+            </div>
+
+
+
 
             <div class="form-group">
                 <label for="apikey" class="form-label"><i class="fas fa-key"></i> API key</label>
                 <input type="text" class="form-control" id="apikey" name="apikey" value="{{ old('apikey') ?? $branch->apikey }}" required autocomplete="off">
+                @if ($errors->has('apikey'))
+                <div class="alert alert-danger alert-small">{{ $errors->first('apikey') }}</div>
+                @endif
             </div>
 
 
