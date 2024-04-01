@@ -464,38 +464,67 @@ class Authmanager extends Controller
 
 
 
-    function  createbranchowners()
-    {
-        $userdata = User::all()->reverse();
-        $branchdata = Branch::all()->reverse();
-        return view('branchowners.createbranchowners',compact('userdata','branchdata'));
-    }
+    function createbranchowners()
+{
+    // Retrieve all users and branches
+    $userdata = User::all()->reverse();
+
+    // Ensure $branchdata is defined and accessible
+    $branchdataall = Branch::all()->reverse();
+
+    // Filter out branches that are already associated with owners
+    $branchdata = $branchdataall->reject(function ($branch) {
+        // Check if the branch ID exists in the owners' branch column
+        return Owners::where('branch', $branch->id)->exists();
+    });
+
+    // Pass filtered branches to the view
+    return view('branchowners.createbranchowners', compact('userdata', 'branchdata'));
+}
 
 
 
 
-    public function createbranchownerspost(Request $request)
-    {
-        $request->validate([
-            'branch_name' => 'required|string', // Ensure it's a string
-            'owner_id' => 'required|array',
-            'owner_id.*' => 'exists:users,id', // Assuming users is your users table
-        ]);
+public function createbranchownerspost(Request $request)
+{
+    $request->validate([
+        'branch_name' => 'required|string',
+        'owner_ids' => 'required|array', // Change validation to expect an array
+        'owner_ids.*' => 'required|string', // Ensure each element in the array is a string
+    ]);
 
-        $branchName = $request->input('branch_name');
-        $ownerIds = $request->input('owner_id');
+    $branchName = $request->input('branch_name');
+    $ownerIds = $request->input('owner_ids'); // Retrieve owner IDs from the form
 
-        // Convert array to comma-separated string
-        $ownerIdsString = implode(',', $ownerIds);
+    // Convert the array of owner IDs to a comma-separated string
+    $commaSeparatedOwnerIds = implode(',', $ownerIds);
 
-        // Assuming you want to create a new record in the Owners model
-        Owners::create([
-            'branch' => $branchName, // Save the branch name directly
-            'owners' => $ownerIdsString, // Store the string in the database
-        ]);
+    // Create a new record in the Owners model
+    Owners::create([
+        'branch' => $branchName,
+        'owners' => $commaSeparatedOwnerIds, // Store the comma-separated string of owner IDs
+    ]);
 
-        return redirect(route('branchowners'))->with("success");
-    }
+    return redirect(route('branchowners'))->with("success");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

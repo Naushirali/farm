@@ -30,6 +30,7 @@
             <p><strong>Branch name:</strong> {{ $branch->name}}</p>
             <p><strong>Location:</strong> {{ $branch->location}}</p>
             <p><strong>Mobile number:</strong> {{ $branch->mobilenumber}}</p>
+            <p><strong>Branch code:</strong> {{ $branch->id}}</p>
             <p><strong>Password:</strong> {{ $branch->password}}</p>
             <p><strong>API Key:</strong> {{ $branch->apikey}}</p>
 
