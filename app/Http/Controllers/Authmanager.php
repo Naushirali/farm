@@ -511,6 +511,69 @@ public function createbranchownerspost(Request $request)
 
 
 
+public function viewbranchowners($id)
+     {
+    $branch = Owners::find($id);
+    return view('branchowners.viewbranchowners', ['branch' => $branch]);
+    }
+
+    public function editbranchowners($id)
+    {
+
+        $userdata = User::all()->reverse();
+        // Ensure $branchdata is defined and accessible
+        $branchdataall = Branch::all()->reverse();
+
+        // Filter out branches that are already associated with owners
+        $branchdata = $branchdataall->reject(function ($branch) {
+            // Check if the branch ID exists in the owners' branch column
+            return Owners::where('branch', $branch->id)->exists();
+        });
+
+        // Find the owner by ID
+        $branch = Owners::find($id);
+
+        // Pass both $branch and $branchdata to the view
+        return view('branchowners.editbranchowners', ['branch' => $branch, 'branchdata' => $branchdata, 'userdata' => $userdata]);
+    }
+
+
+
+
+    public function updatebranchowners(Request $request, $id)
+{
+    $request->validate([
+        'branch_name' => 'required|string',
+        'owner_ids' => 'required|array', // Change validation to expect an array
+        'owner_ids.*' => 'required|string', // Ensure each element in the array is a string
+    ]);
+
+    $branch = Owners::find($id); // Assuming the model name is Branch
+    $branch->branch = $request->input('branch_name'); // Correcting input key
+
+    // Retrieve owner IDs from the form
+    $ownerIds = $request->input('owner_ids');
+
+    // Convert the array of owner IDs to a comma-separated string
+    $commaSeparatedOwnerIds = implode(',', $ownerIds);
+
+    // Update the branch record in the Owners model
+    $branch->update([
+        'branch' => $request->input('branch_name'),
+        'owners' => $commaSeparatedOwnerIds, // Store the comma-separated string of owner IDs
+    ]);
+
+    return redirect(route('viewbranchowners', ['id' => $id]));
+}
+
+
+
+
+
+
+
+
+
 
 
 

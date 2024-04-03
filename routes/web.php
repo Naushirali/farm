@@ -61,6 +61,9 @@ Route::get('deletebranch/{id}', [Authmanager::class,'deletebranch'])->name('dele
 Route::get('/branchowners', [Authmanager::class,'branchowners'])->name('branchowners')->middleware(['guests']);
 Route::get('/createbranchowners', [Authmanager::class,'createbranchowners'])->name('createbranchowners')->middleware(['guests']);
 Route::post('/createbranchowners', [Authmanager::class,'createbranchownerspost'])->name('createbranchowners.post')->middleware(['guests']);
+Route::get('/viewbranchowners/{id}', [Authmanager::class,'viewbranchowners'])->name('viewbranchowners')->middleware(['guests']);
+Route::get('/editbranchowners/{id}', [Authmanager::class,'editbranchowners'])->name('editbranchowners')->middleware(['guests']);
+Route::put('updatebranchowners/{id}', [Authmanager::class,'updatebranchowners'])->name('updatebranchowners')->middleware(['guests']);
 
 
 

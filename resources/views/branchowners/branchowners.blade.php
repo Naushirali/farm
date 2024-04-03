@@ -237,12 +237,14 @@
 
 
 
+
+
                 </div>
 
 
                 <div class="column-list-item-wrapper">
-                  <a href="{{ route('editbranch', ['id' => $receipt->id]) }}" class="view-link">Edit</a>
-                  <a href="{{ route('viewbranch', ['id' => $receipt->id]) }}" class="edit-link">View</a>
+                  <a href="{{ route('editbranchowners', ['id' => $receipt->id]) }}" class="view-link">Edit</a>
+                  <a href="{{ route('viewbranchowners', ['id' => $receipt->id]) }}" class="edit-link">View</a>
                 </div>
             </div>
         </li>
@@ -278,21 +280,6 @@
 
 
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

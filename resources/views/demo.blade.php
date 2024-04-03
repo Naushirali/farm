@@ -1,138 +1,31 @@
-<div class="login-container">
-    <h2>Create Branch-owners</h2>
-    <form action="{{ route('createbranchowners.post') }}" method="POST">
-        @csrf
+<div class="form-group">
+    @php
+        $owners = is_array($branch->owners) ? $branch->owners : explode(',', $branch->owners);
+    @endphp
 
-        <select id="branch" name="branch_name" required>
-            <option value="">Select branch name</option>
-            @foreach($branchdata as $branch)
-                <option value="{{ $branch->id }}">{{ $branch->name }} - {{ $branch->location }}</option>
-            @endforeach
-        </select>
-
-        <input type="hidden" id="owner-id-input" name="owner_id" required> <!-- Hidden input to store owner ID -->
-
-        <div class="input-icon">
-            <input type="text" id="owner-input" placeholder="Select owner name" required autocomplete="off">
-            <i class="fas fa-chevron-down fa-xs"></i>
-        </div>
-
-        <div id="owners-list"></div>
-
-        <script>
-            var ownersData = [
-                @foreach($userdata as $user)
-                    { id: '{{ $user->id }}', name: '{{ $user->name }}', mobile: '{{ $user->mobilenumber }}' },
-                @endforeach
-            ];
-
-            var input = document.getElementById('owner-input');
-            var ownersList = document.getElementById('owners-list');
-            var ownerIdInput = document.getElementById('owner-id-input'); // Get the hidden input
-
-            input.addEventListener('focus', function() {
-                showOwnersList();
-            });
-
-            input.addEventListener('input', function() {
-                showOwnersList();
-            });
-
-            function showOwnersList() {
-                var inputValue = input.value.toLowerCase();
-                ownersList.innerHTML = '';
-                var visibleSuggestions = 0; // Counter for visible suggestions
-                ownersData.forEach(function(owner) {
-                    if (owner.name.toLowerCase().includes(inputValue) || owner.mobile.includes(inputValue)) {
-                        if (visibleSuggestions < 3) { // Display only 3 suggestions
-                            var ownerItem = document.createElement('div');
-                            ownerItem.textContent = owner.name + ' - ' + owner.mobile;
-                            ownerItem.classList.add('owner-item');
-                            ownerItem.setAttribute('data-owner-id', owner.id);
-                            ownerItem.addEventListener('click', function() {
-                                input.value = owner.name + ' - ' + owner.mobile;
-                                ownerIdInput.value = owner.id; // Set the owner ID in the hidden input
-                                ownersList.innerHTML = '';
-                            });
-                            ownersList.appendChild(ownerItem);
-                            visibleSuggestions++; // Increment visible suggestions counter
-                        }
-                    }
-                });
-                if (visibleSuggestions > 0) {
-                    ownersList.style.display = 'block';
-                } else {
-                    ownersList.style.display = 'none';
-                }
-            }
-
-            document.addEventListener('click', function(event) {
-                if (!input.contains(event.target) && !ownersList.contains(event.target)) {
-                    ownersList.innerHTML = '';
-                }
-            });
-        </script>
-
-        <button type="button" id="add-owner">Add More Owner</button>
-
-        <button type="submit">Create</button>
-    </form>
+    <div class="multiple-owner-container">
+        @foreach($owners as $key => $owner)
+            @php
+                $user = \App\Models\User::find($owner);
+            @endphp
+            @if($user)
+                <div class="owner-container">
+                    <label for="owner{{ $key + 1 }}" class="form-label"><i class="fas fa-user"></i> Owner {{ $key + 1 }}</label>
+                    <div class="input-icon owner-input">
+                        <input type="text" class="owner-input-field form-control" id="owner{{ $key + 1 }}" placeholder="Select owner name" value="{{ $user->name }} - {{ $user->mobilenumber }}" required autocomplete="off">
+                        <div class="owners-list"></div>
+                    </div>
+                    @if($key > 0)
+                        <button class="btn btn-outline-danger delete-owner delete-button" type="button" data-target="{{ $key + 1 }}"><i class="fas fa-trash"></i></button>
+                    @endif
+                </div>
+            @endif
+        @endforeach
+    </div>
+    <button type="button" id="add-owner" class="btn btn-primary">Add More Owner</button>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="login-container">
-    <h2>Create Branch-owners</h2>
-    <form action="{{ route('createbranchowners.post') }}" method="POST">
-        @csrf
-
-        <select id="branch" name="branch_name" required>
-            <option value="">Select branch name</option>
-            @foreach($branchdata as $branch)
-                <option value="{{ $branch->id }}">{{ $branch->name }} - {{ $branch->location }}</option>
-            @endforeach
-        </select>
-
-        <input type="hidden" id="owner-id-input" name="owner_id[]" required> <!-- Hidden input to store owner ID -->
-
-        <div class="input-icon">
-            <input type="text" class="owner-input" placeholder="Select owner name" required autocomplete="off">
-            <i class="fas fa-chevron-down fa-xs"></i>
-        </div>
-
-        <div class="owners-list"></div>
-
-        <button type="button" class="add-owner">Add More Owner</button>
-
-        <button type="submit">Create</button>
-    </form>
-</div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var ownersData = [
         @foreach($userdata as $user)
@@ -140,70 +33,128 @@
         @endforeach
     ];
 
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('add-owner')) {
-            var form = event.target.closest('form');
-            var lastOwnerInput = form.querySelector('.owner-input:last-of-type');
-            var clonedOwnerInput = lastOwnerInput.cloneNode(true);
-            var clonedOwnerIdInput = form.querySelector('#owner-id-input').cloneNode(true);
+    $(document).ready(function() {
+        // Add owner input click event
+        $('#add-owner').click(function() {
+            addOwnerInput();
+        });
 
-            clonedOwnerInput.value = ''; // Clear the value of cloned input
-            clonedOwnerIdInput.value = ''; // Clear the value of cloned hidden input
-
-            form.insertBefore(clonedOwnerIdInput, event.target); // Insert cloned hidden input
-            form.insertBefore(clonedOwnerInput, event.target); // Insert cloned input
+        // Function to add owner input
+        function addOwnerInput() {
+            var lastOwnerIndex = $('.multiple-owner-container .owner-container').length;
+            var newOwnerInput = `
+                <div class="owner-container">
+                    <label for="owner${lastOwnerIndex + 1}" class="form-label"><i class="fas fa-user"></i> Owner ${lastOwnerIndex + 1}</label>
+                    <div class="input-icon owner-input">
+                        <input type="text" class="owner-input-field form-control" id="owner${lastOwnerIndex + 1}" placeholder="Select owner name" required autocomplete="off">
+                        <div class="owners-list"></div>
+                    </div>
+                    <button class="btn btn-outline-danger delete-owner delete-button" type="button" data-target="${lastOwnerIndex + 1}"><i class="fas fa-trash"></i></button>
+                </div>`;
+            $('.multiple-owner-container').append(newOwnerInput);
         }
-    });
 
-    document.addEventListener('focusin', function(event) {
-        if (event.target.classList.contains('owner-input')) {
-            showOwnersList(event.target);
-        }
-    });
+        // Show owners list on input focus or input
+        $(document).on('focus input', '.owner-input-field', function() {
+            var inputField = $(this);
+            var ownersList = inputField.next('.owners-list');
+            showOwnersList(inputField, ownersList);
+        });
 
-    document.addEventListener('input', function(event) {
-        if (event.target.classList.contains('owner-input')) {
-            showOwnersList(event.target);
-        }
-    });
-
-    function showOwnersList(input) {
-        var ownersList = input.nextElementSibling;
-        var ownerIdInput = input.previousElementSibling;
-
-        var inputValue = input.value.toLowerCase();
-        ownersList.innerHTML = '';
-        var visibleSuggestions = 0; // Counter for visible suggestions
-        ownersData.forEach(function(owner) {
-            if (owner.name.toLowerCase().includes(inputValue) || owner.mobile.includes(inputValue)) {
-                if (visibleSuggestions < 3) { // Display only 3 suggestions
-                    var ownerItem = document.createElement('div');
-                    ownerItem.textContent = owner.name + ' - ' + owner.mobile;
-                    ownerItem.classList.add('owner-item');
-                    ownerItem.setAttribute('data-owner-id', owner.id);
-                    ownerItem.addEventListener('click', function() {
-                        input.value = owner.name + ' - ' + owner.mobile;
-                        ownerIdInput.value = owner.id; // Set the owner ID in the hidden input
-                        ownersList.innerHTML = '';
-                    });
-                    ownersList.appendChild(ownerItem);
-                    visibleSuggestions++; // Increment visible suggestions counter
-                }
+        // Handle click outside to close suggestions
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('.owner-input').length) {
+                $('.owners-list').hide();
             }
         });
-        if (visibleSuggestions > 0) {
-            ownersList.style.display = 'block';
-        } else {
-            ownersList.style.display = 'none';
-        }
-    }
 
-    document.addEventListener('click', function(event) {
-        if (!event.target.classList.contains('owner-input') && !event.target.classList.contains('owners-list')) {
-            var ownersLists = document.querySelectorAll('.owners-list');
-            ownersLists.forEach(function(ownersList) {
-                ownersList.innerHTML = '';
+        // Function to show owners list
+        function showOwnersList(inputField, ownersList) {
+            var inputValue = inputField.val().toLowerCase();
+            ownersList.empty();
+            var visibleSuggestions = 0; // Counter for visible suggestions
+            ownersData.forEach(function(owner) {
+                if ((owner.name.toLowerCase().includes(inputValue) || owner.mobile.includes(inputValue)) && visibleSuggestions < 3) {
+                    var ownerItem = $('<div class="owner-item"></div>').text(owner.name + ' - ' + owner.mobile);
+                    ownerItem.attr('data-owner-id', owner.id);
+                    ownerItem.on('click', function() {
+                        inputField.val(owner.name + ' - ' + owner.mobile);
+                        // Set the owner ID in the hidden input if needed
+                        var ownerIdInput = $('<input type="hidden" name="owner_ids[]" />').val(owner.id);
+                        inputField.after(ownerIdInput);
+                        ownersList.hide();
+                    });
+                    ownersList.append(ownerItem);
+                    visibleSuggestions++;
+                }
             });
+            if (visibleSuggestions > 0) {
+                ownersList.show();
+            } else {
+                ownersList.hide();
+            }
         }
+
+        // Delete owner input
+        $('.multiple-owner-container').on('click', '.delete-owner', function() {
+            var targetId = $(this).data('target');
+            $('#owner' + targetId).closest('.owner-container').remove();
+        });
     });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

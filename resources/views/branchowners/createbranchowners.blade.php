@@ -114,11 +114,14 @@
 }
 
 .input-icon i {
-  position: absolute;
-  right: 16px;
-  top: 38%;
-  transform: translateY(-50%);
+  position: relative;
+  right: 25px;
 }
+
+.delete-icon:hover {
+        transform: scale(1.1); /* Scale the icon slightly on hover */
+        color: red; /* Change color to red on hover */
+    }
 
 .fa-chevron-down {
     position: absolute;
@@ -207,8 +210,16 @@
             inputField.placeholder = 'Select owner name';
             inputField.required = true;
             inputField.autocomplete = 'off';
+            inputField.style.marginRight = '-13px';
 
             newOwnerInput.appendChild(inputField);
+
+            var deleteIcon = document.createElement('i');
+            deleteIcon.classList.add('fas', 'fa-trash', 'delete-icon');
+            deleteIcon.addEventListener('click', function() {
+                newOwnerInput.remove();
+            });
+            newOwnerInput.appendChild(deleteIcon);
 
             var ownersList = document.createElement('div');
             ownersList.classList.add('owners-list');
@@ -247,14 +258,8 @@
                         ownerItem.setAttribute('data-owner-id', owner.id);
                         ownerItem.addEventListener('click', function() {
                             input.value = owner.name + ' - ' + owner.mobile;
-                            // Set the owner ID in the hidden input if needed
-                            var ownerIdInput = document.createElement('input');
-                            ownerIdInput.type = 'hidden';
-                            ownerIdInput.name = 'owner_ids[]'; // Assuming you want to pass multiple owner IDs
-                            ownerIdInput.value = owner.id;
-                            form.appendChild(ownerIdInput);
-
-                            ownersList.innerHTML = '';
+                            input.setAttribute('data-owner-id', owner.id); // Store the owner ID as a data attribute
+                            ownersList.innerHTML = ''; // Clear the suggestion list
                         });
                         ownersList.appendChild(ownerItem);
                         visibleSuggestions++; // Increment visible suggestions counter
@@ -278,7 +283,32 @@
             });
         });
 
+        // Add this function to collect all owner IDs when the "create" button is clicked
+        function collectOwnerIds() {
+            var ownerIds = [];
+            document.querySelectorAll('.owner-input-field').forEach(function(inputField) {
+                var ownerId = inputField.getAttribute('data-owner-id');
+                if (ownerId) {
+                    ownerIds.push(ownerId);
+                }
+            });
+            return ownerIds;
+        }
+
+        // Modify the existing event listener for the "submit" button
+        form.addEventListener('submit', function(event) {
+            var ownerIds = collectOwnerIds();
+            // Assuming you have an input field for passing owner IDs to the controller
+            var ownerIdsInput = document.createElement('input');
+            ownerIdsInput.type = 'hidden';
+            ownerIdsInput.name = 'owner_ids[]'; // Assuming you want to pass multiple owner IDs
+            ownerIdsInput.value = ownerIds.join(',');
+            form.appendChild(ownerIdsInput);
+            // You can also prevent the default form submission behavior if needed
+            // event.preventDefault();
+        });
     </script>
+
 
 
 
